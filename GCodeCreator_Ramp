@@ -29,5 +29,5 @@ with open(newfile, overwrite) as f:
         f.writelines(moveLoop_tail)
         f.writelines('\n\n\n')
 
-        if speedhigh > speedlow:
+        if speed > speedlow:
             speed -= 50
