@@ -1,0 +1,33 @@
+newfile = 'gcodeoutput/CassRamp.gcode' # puts written file into the gcodeoutput folder.  Change filename here
+overwrite = 'w' # x = not allowed (raises error); w = allowed
+speedlow = 300 # speed in mm/min for movements through rows
+speedhigh = 5000 # speed in mm/min for movements between rows (TO IMPLEMENT!)
+speed = speedhigh
+delta_x = 3 # distance between rows /mm
+delta_y = 180 # length of rows /mm
+n_moveLoop = 9 # number of 'y up, x over, y down, x over' iterations # round(delta_y/(delta_x*2))
+n_outloop = 100 # number of repetitions for the 'moveLoop' # round(time/speedlow * dist_moveLoop) # number of times to execute script given time and distance inputs
+# time = 3 # approximate desired hours for entire script to run (user should err high)
+# dist_moveLoop = (delta_x + delta_y) * 2 * n_moveLoop # approximate distance traveled in mm through entire execution (fudged a bit to make time more accurate)
+
+# g-code initialization commands
+home_xy = 'G28 X0 Y0 F5000 ;home X and Y\n\n' # code start, home X and Y at same time
+init_rel = 'G91 ;initialize relative movement\n\n\n' # initialize relative movement for scans
+
+with open(newfile, overwrite) as f:
+    f.writelines([home_xy])
+    f.writelines([init_rel])
+
+    for x in range(n_outloop):
+
+        moveLoop = 'G0 Y{} F{}\nG0 X{}\nG0 Y-{}\nG0 X{}\n\n'.format(delta_y, speed, delta_x, delta_y, delta_x)
+        moveLoop_tail = 'G0 X-{}\n'.format(n_moveLoop * 20)
+
+        for i in range(n_moveLoop):
+            f.writelines(moveLoop)
+
+        f.writelines(moveLoop_tail)
+        f.writelines('\n\n\n')
+
+        if speedhigh > speedlow:
+            speed -= 50
