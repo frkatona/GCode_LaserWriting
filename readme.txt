@@ -1,6 +1,7 @@
 Writes g-code file with automated looping and simplified inputs
 
 CHANGELOG
+8/16 - added cGPT-assisted ramp creator with animation (still in development, wastes time between loops)
 6/23 - 1: more finely, faster, smaller
 6/23 - 2: smaller-still, true origin start
 6/23 - 3: chopped off cycle from 7 to 6 each way
